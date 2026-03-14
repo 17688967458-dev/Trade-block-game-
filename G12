@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Economics: Global Trade Wars | A-Level Revision</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            overflow-x: hidden;
+        }
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive;
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+        }
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .glow-text {
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
+        }
+        .progress-bar {
+            transition: width 0.5s ease-out;
+        }
+        .monster-bounce {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .practice-option {
+            transition: all 0.3s ease;
+        }
+        .practice-option:hover {
+            transform: translateX(10px);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+        .practice-option.correct {
+            background: linear-gradient(90deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05));
+            border-color: #22c55e;
+            color: #86efac;
+        }
+        .practice-option.wrong {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.05));
+            border-color: #ef4444;
+            color: #fca5a5;
+        }
+        .streak-flame {
+            animation: flame 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes flame {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen grid-bg">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-slate-900/90 backdrop-blur-md border-b border-purple-500/30 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-2xl">🌐</div>
+                <h1 class="pixel-font text-sm md:text-lg text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                    MONSTER ECONOMICS
+                </h1>
+            </div>
+            <div class="flex gap-4 text-sm">
+                <div class="flex items-center gap-2">
+                    <span class="text-yellow-400">⚡</span>
+                    <span id="xp-display" class="font-bold">XP: 0</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-red-400">❤️</span>
+                    <span id="lives-display" class="font-bold">Lives: 3</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Screen -->
+    <section id="home-screen" class="pt-32 pb-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-5xl md:text-7xl font-bold mb-6">
+                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 glow-text">
+                    Global Trade Wars
+                </span>
+            </h2>
+            <p class="text-xl text-slate-400 mb-8">Master Globalization, Deglobalization & Trade Blocs</p>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="startCampaign()" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold text-lg hover:scale-105 transition-transform">
+                    🎮 Campaign Mode
+                </button>
+                <button onclick="startPracticeMode()" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl font-bold text-lg hover:scale-105 transition-transform">
+                    📚 Practice Mode (10 Questions)
+                </button>
+            </div>
+        </div>
+
+        <!-- Monster Cards -->
+        <div class="max-w-6xl mx-auto mt-20 grid md:grid-cols-3 gap-6">
+            <div class="bg-blue-900/30 border border-blue-500/30 rounded-2xl p-6 text-center card-hover">
+                <div class="text-5xl mb-4">🌍</div>
+                <h3 class="text-xl font-bold text-blue-400">The Globalizer</h3>
+                <p class="text-sm text-slate-400 mt-2">FDI, TNCs, Trade Interdependence</p>
+            </div>
+            <div class="bg-red-900/30 border border-red-500/30 rounded-2xl p-6 text-center card-hover">
+                <div class="text-5xl mb-4">🧱</div>
+                <h3 class="text-xl font-bold text-red-400">The Fragmenter</h3>
+                <p class="text-sm text-slate-400 mt-2">Protectionism, Supply Chain Shocks</p>
+            </div>
+            <div class="bg-purple-900/30 border border-purple-500/30 rounded-2xl p-6 text-center card-hover">
+                <div class="text-5xl mb-4">🏰</div>
+                <h3 class="text-xl font-bold text-purple-400">The Bloc Keeper</h3>
+                <p class="text-sm text-slate-400 mt-2">Customs Unions, Trade Creation</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practice Mode Section -->
+    <section id="practice-section" class="hidden pt-24 pb-12 px-6">
+        <div class="max-w-3xl mx-auto">
+            <!-- Progress Header -->
+            <div class="bg-slate-900/80 border border-purple-500/30 rounded-2xl p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-purple-300">Practice Arena</h2>
+                        <p class="text-slate-400 text-sm">10 Questions • Mixed Topics</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl font-bold text-yellow-400"><span id="practice-current">1</span><span class="text-lg text-slate-500">/10</span></div>
+                        <div class="text-sm text-slate-400">Score: <span id="practice-score" class="text-green-400 font-bold">0</span></div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-800 rounded-full h-3">
+                    <div id="practice-progress" class="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full transition-all duration-500" style="width: 10%"></div>
+                </div>
+                
+                <!-- Streak Counter -->
+                <div class="flex items-center gap-2 mt-3 justify-end">
+                    <span class="text-orange-400 streak-flame">🔥</span>
+                    <span class="text-sm text-slate-400">Streak: <span id="streak-count" class="text-orange-400 font-bold">0</span></span>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-slate-900/80 border border-slate-700 rounded-2xl p-8 mb-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <span id="topic-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">GLOBALIZATION</span>
+                    <span class="text-slate-500 text-sm">•</span>
+                    <span class="text-slate-400 text-sm">Select the best answer</span>
+                </div>
+                
+                <h3 id="practice-question" class="text-xl font-semibold mb-6 leading-relaxed">
+                    Loading question...
+                </h3>
+                
+                <div id="practice-options" class="space-y-3">
+                    <!-- Options injected here -->
+                </div>
+
+                <!-- Explanation Box (hidden initially) -->
+                <div id="explanation-box" class="hidden mt-6 p-4 bg-slate-800/50 border-l-4 border-purple-500 rounded-r-lg">
+                    <h4 class="font-bold text-purple-300 mb-2">📖 Explanation:</h4>
+                    <p id="explanation-text" class="text-slate-300 text-sm leading-relaxed"></p>
+                    <button onclick="nextPracticeQuestion()" class="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm font-semibold transition-colors">
+                        Next Question →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-3 gap-4">
+                <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4 text-center">
+                    <div class="text-2xl mb-1">🌍</div>
+                    <div class="text-xs text-slate-400">Globalization</div>
+                    <div id="stat-global" class="text-lg font-bold text-blue-400">0/4</div>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4 text-center">
+                    <div class="text-2xl mb-1">🧱</div>
+                    <div class="text-xs text-slate-400">Deglobalization</div>
+                    <div id="stat-deglobal" class="text-lg font-bold text-red-400">0/3</div>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4 text-center">
+                    <div class="text-2xl mb-1">🏰</div>
+                    <div class="text-xs text-slate-400">Trade Blocs</div>
+                    <div id="stat-bloc" class="text-lg font-bold text-purple-400">0/3</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practice Results Modal -->
+    <div id="practice-results" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-2 border-yellow-400 rounded-3xl p-8 max-w-lg w-full text-center">
+            <div class="text-6xl mb-4">🎓</div>
+            <h3 class="text-3xl font-bold text-yellow-400 mb-2 pixel-font">PRACTICE COMPLETE!</h3>
+            <p class="text-slate-400 mb-6">You've conquered the mixed battleground!</p>
+            
+            <div class="bg-slate-800 rounded-xl p-6 mb-6 space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-400">Final Score</span>
+                    <span id="final-score" class="text-3xl font-bold text-green-400">8/10</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-400">Accuracy</span>
+                    <span id="final-accuracy" class="text-xl font-bold text-purple-400">80%</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-400">Best Streak</span>
+                    <span id="final-streak" class="text-xl font-bold text-orange-400">5 🔥</span>
+                </div>
+                <div class="flex justify-between items-center pt-3 border-t border-slate-700">
+                    <span class="text-slate-400">Grade</span>
+                    <span id="final-grade" class="text-2xl font-bold text-yellow-400">A</span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="restartPractice()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold hover:shadow-lg transition-all">
+                    🔄 Try Again
+                </button>
+                <button onclick="goHome()" class="w-full py-3 bg-slate-700 rounded-xl hover:bg-slate-600 transition-colors">
+                    🏠 Back to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Practice Mode Questions Database (10 Questions)
+        const practiceQuestions = [
+            {
+                topic: "globalization",
+                topicName: "GLOBALIZATION",
+                topicColor: "blue",
+                question: "Which of the following best describes the trend in global FDI flows mentioned in A-Level Economics contexts?",
+                options: [
+                    "Developed economies consistently receive over 70% of global FDI",
+                    "Developing economies' share of FDI inflows reached 52% in 2012, exceeding developed economies for the first time",
+                    "FDI flows have remained stable at 30% for both developed and developing economies since 2000",
+                    "Only Asian economies receive significant FDI inflows"
+                ],
+                correct: 1,
+                explanation: "In 2012, developing economies' share of global FDI inflows reached a record 52%, exceeding developed economies for the first time. This reflects the shift in global economic power and the rise of emerging markets as attractive investment destinations."
+            },
+            {
+                topic: "tradebloc",
+                topicName: "TRADE BLOCS",
+                topicColor: "purple",
+                question: "What is the KEY difference between a Free Trade Area and a Customs Union?",
+                options: [
+                    "Only Customs Unions allow free movement of labour",
+                    "Customs Unions have a Common External Tariff (CET) while Free Trade Areas do not",
+                    "Free Trade Areas always include more countries than Customs Unions",
+                    "Customs Unions prohibit foreign direct investment"
+                ],
+                correct: 1,
+                explanation: "A Customs Union adds a Common External Tariff (CET) to the features of a Free Trade Area. While both remove internal trade barriers, only Customs Unions harmonize external tariffs against non-members. This is crucial for understanding trade diversion effects."
+            },
+            {
+                topic: "deglobalization",
+                topicName: "DEGLOBALIZATION",
+                topicColor: "red",
+                question: "During the 2008 financial crisis, what happened to world trade volumes?",
+                options: [
+                    "They increased by 5% due to protectionist policies",
+                    "They remained stable as WTO rules prevented declines",
+                    "They dropped by 5% in November 2008, 7% in December, and another 7% in January 2009",
+                    "They shifted entirely to service trade while goods trade declined"
+                ],
+                correct: 2,
+                explanation: "The 2008 crisis demonstrated deglobalization in action: world trade dropped by 5% in November 2008, 7% in December, and another 7% in January 2009. This was caused by trade finance drying up, protectionism, and supply chain disruptions."
+            },
+            {
+                topic: "globalization",
+                topicName: "GLOBALIZATION",
+                topicColor: "blue",
+                question: "What does the 'falling labour share of GDP' despite rising productivity indicate?",
+                options: [
+                    "Workers are becoming more efficient but receiving proportionally less of the income generated",
+                    "Capital is becoming less important in production",
+                    "Globalization has stopped affecting labour markets",
+                    "Trade unions have become stronger in negotiating wages"
+                ],
+                correct: 0,
+                explanation: "Between 1999-2011, US labour productivity rose 85% while real hourly earnings only rose 35%. This divergence suggests that while workers produce more value, they capture a smaller share of that value, partly due to globalisation pressures and technological change."
+            },
+            {
+                topic: "tradebloc",
+                topicName: "TRADE BLOCS",
+                topicColor: "purple",
+                question: "What is 'Trade Diversion' in the context of trading blocs?",
+                options: [
+                    "When trade is diverted from efficient non-member producers to less efficient member producers due to the CET",
+                    "When trade increases between member countries",
+                    "When a country leaves a trading bloc",
+                    "When trade shifts from services to goods"
+                ],
+                correct: 0,
+                explanation: "Trade Diversion occurs when a customs union causes imports to shift from low-cost non-member countries to higher-cost member countries due to the Common External Tariff. This represents a welfare loss as less efficient producers are protected."
+            },
+            {
+                topic: "globalization",
+                topicName: "GLOBALIZATION",
+                topicColor: "blue",
+                question: "Which factor is NOT typically associated with driving globalisation?",
+                options: [
+                    "Reduction in transport and communication costs",
+                    "Increasing trade barriers and tariffs",
+                    "Growth of Transnational Companies (TNCs)",
+                    "Liberalization of trade and investment policies"
+                ],
+                correct: 1,
+                explanation: "Increasing trade barriers and tariffs would hinder, not drive, globalisation. The main drivers include technological advances (reducing transport/communication costs), TNC expansion, and policy liberalization (WTO agreements, deregulation)."
+            },
+            {
+                topic: "deglobalization",
+                topicName: "DEGLOBALIZATION",
+                topicColor: "red",
+                question: "What is meant by 'trade interdependence' creating vulnerability?",
+                options: [
+                    "Countries become self-sufficient and don't need trade",
+                    "Recessions in one country can be rapidly transmitted through global supply chains",
+                    "Countries only trade with their neighbours",
+                    "Trade balances always remain equal between partners"
+                ],
+                correct: 1,
+                explanation: "Trade interdependence means economies rely on each other through supply chains. The 2008 crisis showed how a financial shock in the US rapidly spread globally through these interconnected trade networks, amplifying the recession."
+            },
+            {
+                topic: "tradebloc",
+                topicName: "TRADE BLOCS",
+                topicColor: "purple",
+                question: "Which of the following represents the HIGHEST level of economic integration?",
+                options: [
+                    "Free Trade Area",
+                    "Customs Union",
+                    "Common Market",
+                    "Preferential Trade Agreement"
+                ],
+                correct: 2,
+                explanation: "A Common Market includes all features of a Customs Union (free internal trade + CET) PLUS free movement of factors of production (labour and capital) and harmonized standards. This is deeper integration than just tariff cooperation."
+            },
+            {
+                topic: "globalization",
+                topicName: "GLOBALIZATION",
+                topicColor: "blue",
+                question: "How might TNCs contribute to cultural erosion in host countries?",
+                options: [
+                    "By exclusively selling local products",
+                    "Through the dominance of Western brands and consumer culture displacing local traditions",
+                    "By refusing to advertise in local media",
+                    "Through mandatory language training for all employees"
+                ],
+                correct: 1,
+                explanation: "TNCs often bring Western consumer culture, brands, and media content that can overshadow local traditions and cultural practices. This is a common criticism of globalisation - the 'McDonaldization' or homogenization of global culture."
+            },
+            {
+                topic: "deglobalization",
+                topicName: "DEGLOBALIZATION",
+                topicColor: "red",
+                question: "What type of protectionist measure did WTO identify post-2008 crisis?",
+                options: [
+                    "Only import tariffs",
+                    "Only export subsidies",
+                    "Various measures including tariffs, subsidies, and non-tariff barriers",
+                    "No protectionist measures were implemented due to WTO rules"
+                ],
+                correct: 2,
+                explanation: "Despite G20 promises, Pascal Lamy (WTO) identified various protectionist measures post-2008 including import tariffs, subsidies to struggling industries, and non-tariff barriers. This demonstrates how crises trigger deglobalization tendencies."
+            }
+        ];
+
+        // Game State
+        let gameState = {
+            xp: 0,
+            lives: 3,
+            practiceScore: 0,
+            practiceCurrent: 0,
+            practiceStreak: 0,
+            maxStreak: 0,
+            topicStats: { globalization: 0, deglobalization: 0, tradebloc: 0 },
+            answered: false
+        };
+
+        function goHome() {
+            document.getElementById('home-screen').classList.remove('hidden');
+            document.getElementById('practice-section').classList.add('hidden');
+            document.getElementById('practice-results').classList.add('hidden');
+        }
+
+        function startPracticeMode() {
+            // Reset practice state
+            gameState.practiceScore = 0;
+            gameState.practiceCurrent = 0;
+            gameState.practiceStreak = 0;
+            gameState.maxStreak = 0;
+            gameState.topicStats = { globalization: 0, deglobalization: 0, tradebloc: 0 };
+            gameState.answered = false;
+
+            // Shuffle questions
+            shuffleArray(practiceQuestions);
+
+            // Update UI
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('practice-section').classList.remove('hidden');
+            document.getElementById('practice-results').classList.add('hidden');
+            
+            updatePracticeUI();
+            showPracticeQuestion();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function updatePracticeUI() {
+            document.getElementById('practice-current').textContent = gameState.practiceCurrent + 1;
+            document.getElementById('practice-score').textContent = gameState.practiceScore;
+            document.getElementById('practice-progress').style.width = ((gameState.practiceCurrent + 1) / 10 * 100) + '%';
+            document.getElementById('streak-count').textContent = gameState.practiceStreak;
+            
+            // Update topic stats
+            document.getElementById('stat-global').textContent = `${gameState.topicStats.globalization}/4`;
+            document.getElementById('stat-deglobal').textContent = `${gameState.topicStats.deglobalization}/3`;
+            document.getElementById('stat-bloc').textContent = `${gameState.topicStats.tradebloc}/3`;
+        }
+
+        function showPracticeQuestion() {
+            const q = practiceQuestions[gameState.practiceCurrent];
+            gameState.answered = false;
+
+            // Update topic badge
+            const badge = document.getElementById('topic-badge');
+            badge.textContent = q.topicName;
+            badge.className = `px-3 py-1 rounded-full text-xs font-bold bg-${q.topicColor}-500/20 text-${q.topicColor}-300 border border-${q.topicColor}-400/30`;
+
+            // Update question
+            document.getElementById('practice-question').textContent = q.question;
+
+            // Generate options
+            const optionsContainer = document.getElementById('practice-options');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'practice-option w-full text-left p-4 bg-slate-800/50 border border-slate-600 rounded-xl flex items-start gap-3 group';
+                btn.onclick = () => selectPracticeAnswer(idx);
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-full bg-slate-700 group-hover:bg-purple-500 flex items-center justify-center text-sm font-bold transition-colors flex-shrink-0">${String.fromCharCode(65 + idx)}</span>
+                    <span class="flex-1 text-slate-200">${opt}</span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Hide explanation
+            document.getElementById('explanation-box').classList.add('hidden');
+        }
+
+        function selectPracticeAnswer(selected) {
+            if (gameState.answered) return;
+            gameState.answered = true;
+
+            const q = practiceQuestions[gameState.practiceCurrent];
+            const options = document.getElementById('practice-options').children;
+
+            // Mark correct and wrong answers
+            for (let i = 0; i < options.length; i++) {
+                if (i === q.correct) {
+                    options[i].classList.add('correct');
+                } else if (i === selected && i !== q.correct) {
+                    options[i].classList.add('wrong');
+                }
+                options[i].style.pointerEvents = 'none';
+            }
+
+            // Update score and streak
+            if (selected === q.correct) {
+                gameState.practiceScore++;
+                gameState.practiceStreak++;
+                if (gameState.practiceStreak > gameState.maxStreak) {
+                    gameState.maxStreak = gameState.practiceStreak;
+                }
+                gameState.topicStats[q.topic]++;
+                
+                // Add XP
+                gameState.xp += 50;
+                document.getElementById('xp-display').textContent = `XP: ${gameState.xp}`;
+            } else {
+                gameState.practiceStreak = 0;
+                gameState.lives--;
+                document.getElementById('lives-display').textContent = `Lives: ${gameState.lives}`;
+            }
+
+            updatePracticeUI();
+
+            // Show explanation
+            document.getElementById('explanation-text').textContent = q.explanation;
+            document.getElementById('explanation-box').classList.remove('hidden');
+        }
+
+        function nextPracticeQuestion() {
+            gameState.practiceCurrent++;
+            
+            if (gameState.practiceCurrent >= 10) {
+                showPracticeResults();
+            } else {
+                updatePracticeUI();
+                showPracticeQuestion();
+            }
+        }
+
+        function showPracticeResults() {
+            const accuracy = Math.round((gameState.practiceScore / 10) * 100);
+            let grade = 'F';
+            if (accuracy >= 90) grade = 'A*';
+            else if (accuracy >= 80) grade = 'A';
+            else if (accuracy >= 70) grade = 'B';
+            else if (accuracy >= 60) grade = 'C';
+            else if (accuracy >= 50) grade = 'D';
+            else if (accuracy >= 40) grade = 'E';
+
+            document.getElementById('final-score').textContent = `${gameState.practiceScore}/10`;
+            document.getElementById('final-accuracy').textContent = `${accuracy}%`;
+            document.getElementById('final-streak').textContent = `${gameState.maxStreak} 🔥`;
+            document.getElementById('final-grade').textContent = grade;
+
+            document.getElementById('practice-results').classList.remove('hidden');
+        }
+
+        function restartPractice() {
+            document.getElementById('practice-results').classList.add('hidden');
+            startPracticeMode();
+        }
+
+        function startCampaign() {
+            alert('Campaign Mode: Battle each monster boss in sequence! (Feature coming in next update)');
+        }
+    </script>
+</body>
+</html>
